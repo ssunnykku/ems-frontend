@@ -3,6 +3,7 @@ import Body from "../components/Body";
 import Card from "../components/Card";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import FullPageModal from "../components/FullPageModal";
 
 /* 학생정보 카드 */
 const StudentInfoRow = styled.div`
@@ -128,11 +129,12 @@ const Mypage = () => {
             <h2>24.02.27 ~ 24.07.24</h2>
           </div>
           <TimeTable open={'13:13'} close={'15:15'}></TimeTable>
-          <BlueBtn>입실</BlueBtn>
+          <BlueBtn popovertarget='editModal'>입실</BlueBtn>
         </AttendanceCardBody>
       </Card>
     </Body>
     <Footer currentPage="mypage"></Footer>
+    <FullPageModal id='editModal'>sfa</FullPageModal>
   </>;
 };
 

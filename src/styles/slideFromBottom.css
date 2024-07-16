@@ -1,0 +1,32 @@
+[popover] {
+  animation: slideToBottom 0.4s ease-out;
+
+}
+
+[popover]:popover-open {
+  animation: slideFromBottom 0.4s ease-out;
+}
+
+/* Animation keyframes */
+
+@keyframes slideFromBottom {
+  0% {
+    transform: translateY(100vh);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideToBottom {
+  0% {
+    transform: translateY(0);
+    display: block;
+  }
+
+  100% {
+    transform: translateY(100vh);
+    display: none;
+  }
+}
