@@ -17,6 +17,8 @@ const CardWrapper = styled.div`
   width: 100%;
   height: fit-content;
   padding: 1.8461rem;
+  padding-left: 1.23rem;
+  padding-right: 1.23rem;
   font-size: 0.95rem;
   border-radius: 5vw;
   background-color: #FFFFFF;

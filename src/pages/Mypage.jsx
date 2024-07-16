@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import FullPageModal from "../components/FullPageModal";
 import Loading from "../components/Loading";
-
+import InputBasic from "../components/InputBasic";
 /* 학생정보 카드 */
 const StudentInfoRow = styled.div`
   width: 100%;
@@ -16,7 +16,7 @@ const StudentInfoRow = styled.div`
   }
 `;
 
-const StudentInfoTable = styled.div`
+const BasicInfoTable = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -64,7 +64,7 @@ const AttendanceCardBody = styled.div`
   
 `;
 
-const TimeTable = ({open, close}) => {
+const TimeTable = ({ open, close }) => {
   const TimeTableWrapper = styled.div`
     display: flex;
     column-gap: 1rem;
@@ -89,12 +89,12 @@ const TimeTable = ({open, close}) => {
   return <TimeTableWrapper>
     <TimeColumn>
       <div>입실</div>
-      <hr/>
+      <hr />
       <div>{open}</div>
     </TimeColumn>
     <TimeColumn>
       <div>퇴실</div>
-      <hr/>
+      <hr />
       <div>{close}</div>
     </TimeColumn>
   </TimeTableWrapper>
@@ -107,20 +107,29 @@ const BlueBtn = styled.button`
   border-radius: 0.307rem;
   color: white;
   font-size: 0.7194rem;
+`;
 
+// 모달
+const EditStudentInfoRow = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  & span{
+    font-weight: bold;
+  }
 `;
 const Mypage = () => {
   return <>
     <Header title={"마이페이지"}></Header>
     <Body>
       <Card>
-        <StudentInfoTable>
+        <BasicInfoTable>
           <StudentInfoRow><span>이름</span><span>김선희</span></StudentInfoRow>
           <StudentInfoRow><span>HRD Net ID</span><span>sun</span></StudentInfoRow>
           <StudentInfoRow><span>생년월일</span><span>1993.06.02</span></StudentInfoRow>
           <StudentInfoRow><span>전화번호</span><span>010-1234-5678</span></StudentInfoRow>
-        </StudentInfoTable>
-        <EditBtn>내 정보 수정하기</EditBtn>
+        </BasicInfoTable>
+        <EditBtn popovertarget='editModal'>내 정보 수정하기</EditBtn>
       </Card>
       <Card>
         <Title>출석 입력</Title>
@@ -130,12 +139,35 @@ const Mypage = () => {
             <h2>24.02.27 ~ 24.07.24</h2>
           </div>
           <TimeTable open={'13:13'} close={'15:15'}></TimeTable>
-          <BlueBtn popovertarget='editModal'>입실</BlueBtn>
+          <BlueBtn>입실</BlueBtn>
         </AttendanceCardBody>
       </Card>
     </Body>
     <Footer currentPage="mypage"></Footer>
-    <FullPageModal id='editModal'><Loading isComplete></Loading></FullPageModal>
+
+
+    <FullPageModal id='editModal'>
+      <Card>
+        <BasicInfoTable>
+          <EditStudentInfoRow><span>이름</span><span>김선희</span></EditStudentInfoRow>
+          <EditStudentInfoRow><span>HRD Net ID</span><span>sun</span></EditStudentInfoRow>
+          <EditStudentInfoRow><span>생년월일</span><span>1993.06.02</span></EditStudentInfoRow>
+        </BasicInfoTable>
+      </Card>
+      <Card>
+        <BasicInfoTable>
+          <EditStudentInfoRow><span>전화번호</span><InputBasic height='1.8461' width='7.7rem' text='010-1234-5678' type='tel' title='전화번호 입력 형식이 맞지 않습니다. 다시한번 확인하시고 직원에게 문의하여주십시오.' required></InputBasic></EditStudentInfoRow>
+          <EditStudentInfoRow><span>은행</span><InputBasic height='1.8461' width='7.7rem' text='신한' required></InputBasic></EditStudentInfoRow>
+          <EditStudentInfoRow><span>계좌번호</span><InputBasic height='1.8461' width='7.7rem' text='110614495839' required></InputBasic></EditStudentInfoRow>
+          <EditStudentInfoRow><span>이메일</span><InputBasic height='1.8461' width='7.7rem' text='ssunkyung@gmail.com' type='email' required></InputBasic></EditStudentInfoRow>
+          <EditStudentInfoRow><span>현재 비밀번호</span><InputBasic height='1.8461' width='7.7rem'></InputBasic></EditStudentInfoRow>
+          <EditStudentInfoRow><span>새 비밀번호</span><InputBasic height='1.8461' width='7.7rem'></InputBasic></EditStudentInfoRow>
+          <EditStudentInfoRow><span>비밀번호 확인</span><InputBasic height='1.8461' width='7.7rem'></InputBasic></EditStudentInfoRow>
+        </BasicInfoTable>
+        <EditBtn>내 정보 수정하기</EditBtn>
+      </Card>
+
+    </FullPageModal>
   </>;
 };
 
