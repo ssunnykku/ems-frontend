@@ -59,6 +59,7 @@ const InputStyle = styled.input`
   font-size: 14px;
   line-height: 100%;
   padding-left: 1rem;
+  
 
   &::placeholder {
     color: ${Palette.InputBorder};
