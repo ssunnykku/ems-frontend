@@ -22,6 +22,7 @@ const FullPageModalWrapper = styled.div`
   border-radius: 5vw;
   background-color: #FFFFFF;
   box-shadow: 0px 2px 10px rgba(231, 233, 242, 0.7);
+  border: none;
   
 `;
 export default FullPageModal;

@@ -4,6 +4,7 @@ import Card from "../components/Card";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import FullPageModal from "../components/FullPageModal";
+import Loading from "../components/Loading";
 
 /* 학생정보 카드 */
 const StudentInfoRow = styled.div`
@@ -134,7 +135,7 @@ const Mypage = () => {
       </Card>
     </Body>
     <Footer currentPage="mypage"></Footer>
-    <FullPageModal id='editModal'>sfa</FullPageModal>
+    <FullPageModal id='editModal'><Loading isComplete></Loading></FullPageModal>
   </>;
 };
 
