@@ -37,6 +37,16 @@ const CourseCard = ({ course }) => {
   `;
   const attendanceRate = (course.attendanceDays / course.totalTrainingDays) * 100;
   const statusKr = course.status == -1 ? "수강 취소" : course.status == 0 ? "현재 수강중" : "수료 완료";
+  const ProgressWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    & > span{
+      margin-left: 1rem;
+      font-weight: bold;
+    }
+  `;
   return (
     <Card>
       <CourseCardWrapper>
@@ -45,7 +55,7 @@ const CourseCard = ({ course }) => {
           <h1>{course.number}기 {course.name}</h1>
           <h2>{course.startDate} ~ {course.endDate}</h2>
         </CourseTitle>
-        {course.status == 0 ? <ProgressBar val={attendanceRate}></ProgressBar> : null}
+        {course.status == 0 ? <ProgressWrapper><ProgressBar val={attendanceRate}></ProgressBar><span>{attendanceRate}%</span></ProgressWrapper> : null}
         <BasicInfoTable>
           <BasicInfoRow><span>구분</span><span>{course.type}</span></BasicInfoRow>
           <BasicInfoRow><span>교육 과목</span><span>{course.subject}</span></BasicInfoRow>
