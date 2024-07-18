@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const InputBasic = (props) => {
   return (
-    <InputWrapper>
+    <InputWrapper width={props.width}>
       {props.searchIcon && <SearchIcon className="bi bi-search"></SearchIcon>}
       <InputStyle
         text={props.text}
@@ -17,6 +17,9 @@ const InputBasic = (props) => {
         type={props.type}
         onChange={props.onChange}
         value={props.value}
+        pattern = {props.type == 'tel' ? '[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}' : '.*'}
+        title = {props.title}
+        required={props.required}
       />
     </InputWrapper>
   );
@@ -24,22 +27,31 @@ const InputBasic = (props) => {
 
 InputBasic.propTypes = {
   text: PropTypes.string,
-  height: PropTypes.number,
+  width: PropTypes.string,
+  height: PropTypes.string,
   searchIcon: PropTypes.bool,
   editInput: PropTypes.bool,
   type: PropTypes.string,
+  title: PropTypes.string,
+  required: PropTypes.bool,
   placeholder: PropTypes.string,
   value: PropTypes.any,
   onChange: PropTypes.func,
 };
 
-const InputWrapper = styled.div`
-  width: 100%;
+const InputWrapper = ({width, children}) => {
+  const Temp = styled.div`
+  width: ${width};
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 `;
+  return (
+    <Temp>{children}</Temp>
+  )
+}
+  
 
 const SearchIcon = styled.i`
   position: relative;
@@ -58,7 +70,9 @@ const InputStyle = styled.input`
   font-weight: 400;
   font-size: 14px;
   line-height: 100%;
-  padding-left: 1rem;
+  /* padding-left: 1rem; */
+  text-align: center;
+  
 
   &::placeholder {
     color: ${Palette.InputBorder};
