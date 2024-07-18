@@ -35,28 +35,30 @@ const CourseCard = ({ course }) => {
       font-weight: bold;
      }
   `;
+  const attendanceRate = (course.attendanceDays / course.totalTrainingDays) * 100;
+  const statusKr = course.status == -1 ? "수강 취소" : course.status == 0 ? "현재 수강중" : "수료 완료";
   return (
     <Card>
       <CourseCardWrapper>
         <CourseTitle>
-          <h2 className={"current" == "current" ? "current" : ""}>현재 수강중</h2>
-          <h1>277기 자바 클라우드 개발자 과정</h1>
-          <h2>24.02.27 ~ 24.07.24</h2>
+          <h2 className={course.status == 0 ? "current" : ""}>{statusKr}</h2>
+          <h1>{course.number}기 {course.name}</h1>
+          <h2>{course.startDate} ~ {course.endDate}</h2>
         </CourseTitle>
-        {"current" == "current" ? <ProgressBar val="62.5%"></ProgressBar> : <></>}
+        {course.status == 0 ? <ProgressBar val={attendanceRate}></ProgressBar> : null}
         <BasicInfoTable>
-          <BasicInfoRow><span>구분</span><span>구직자 무료</span></BasicInfoRow>
-          <BasicInfoRow><span>교육 과목</span><span>JAVA</span></BasicInfoRow>
-          <BasicInfoRow><span>총 교육일수</span><span>100일</span></BasicInfoRow>
-          <BasicInfoRow><span>일일 교육시간</span><span>8시간</span></BasicInfoRow>
-          <BasicInfoRow><span>강사명</span><span>홍길동</span></BasicInfoRow>
+          <BasicInfoRow><span>구분</span><span>{course.type}</span></BasicInfoRow>
+          <BasicInfoRow><span>교육 과목</span><span>{course.subject}</span></BasicInfoRow>
+          <BasicInfoRow><span>총 교육일수</span><span>{course.totalTrainingDays}일</span></BasicInfoRow>
+          <BasicInfoRow><span>일일 교육시간</span><span>{course.trainingHoursPerDay}시간</span></BasicInfoRow>
+          <BasicInfoRow><span>강사명</span><span>{course.professorName}</span></BasicInfoRow>
         </BasicInfoTable>
       </CourseCardWrapper>
     </Card>
   )
 }
 
-const ProgressBar = ({height = '1.0256rem',val }) => {
+const ProgressBar = ({height = '1.0256',val }) => {
   const progress = keyframes`
     0%{
       width: 0%;
@@ -68,13 +70,13 @@ const ProgressBar = ({height = '1.0256rem',val }) => {
   const ProgressBarWrapper = styled.div`
     width: 100%;
     border: 0.05128rem solid #999999;
-    height: ${height};
-    border-radius: ${height};
+    height: ${height}rem;
+    border-radius: ${height}rem;
 
     div{
       height: 100%;
-      width: ${val};
-      border-radius: ${height};
+      width: ${val}%;
+      border-radius: ${height}rem;
       background-color: #5C7CFA;
       animation: ${progress} 2s ease-out;
     }
@@ -99,11 +101,41 @@ justify-content: space-between;
 & span:first-child{
   font-weight: bold;
 }`;
+
+// 샘플 데이터
+const courses = [{
+  name: "자바 클라우드 개발자 과정",
+  number: 277,
+  type: "구직자 무료",
+  subject: "JAVA",
+  totalTrainingDays: 100,
+  trainingHoursPerDay: 8,
+  professorName: "홍길동",
+  startDate: "24.02.28",
+  endDate: "24.07.24",
+  attendanceDays: 62,
+  status: "0"
+},{
+  name: "자바 클라우드 개발자 과정",
+  number: 276,
+  type: "재직자 유료",
+  subject: "JAVA",
+  totalTrainingDays: 30,
+  trainingHoursPerDay: 8,
+  professorName: "홍길동",
+  startDate: "23.02.28",
+  endDate: "23.07.24",
+  attendanceDays: 25,
+  status: 1
+}]
 const CoursePage = () => {
   return <>
     <Header title="수강 이력"></Header>
     <Body>
-      <CourseCard></CourseCard>
+      {courses.map(course => (
+        <CourseCard course={course}></CourseCard>
+      ))
+      }
     </Body>
     <Footer currentPage="coursePage"></Footer>
   </>;
