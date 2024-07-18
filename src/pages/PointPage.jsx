@@ -4,6 +4,7 @@ import Card from "../components/Card";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Palette from "../styles/Palette";
+import { useState } from "react";
 
 const PointPage = () => {
   const CourseWrapper = styled.div`
@@ -20,7 +21,9 @@ const PointPage = () => {
       width: 3.589rem;
       height: 1.5384rem;
       font-size: 0.6153rem;
-      padding-left: 0.1rem;
+      padding-left: .4rem;
+      padding-top: .3rem;
+      padding-bottom: .3rem;
       border: 0.01rem solid rgba(0,0,0, 0.2);
       border-radius: 10%;
     }
@@ -89,16 +92,63 @@ const PointPage = () => {
       </tr>
     )
   }
+
+
+  // 테스트 데이터
+  const [course, setCourse] = useState({
+    courseName: "자바 클라우드 개발자 과정",
+    startDate: "24.02.27",
+    endDate: "24.07.24"
+  })
+  const courseList = [
+    {
+      courseSeq: 5,
+      courseNumber: 277,
+      selected: true
+    },
+    {
+      courseSeq: 6,
+      courseNumber: 278,
+      selected: false
+    },
+    {
+      courseSeq: 7,
+      courseNumber: 279,
+      selected: false
+    },
+    {
+      courseSeq: 8,
+      courseNumber: 280,
+      selected: false
+    },
+  ]
+  const [pointHistory, setPointHistory] = useState([
+    {
+      date: "24.06.12",
+      category: "자격증 합격",
+      point: 10
+    },
+    {
+      date: "24.06.13",
+      category: "자격증 합격",
+      point: 10
+    }
+  ])
+
   return <>
     <Header title={"포인트 조회"}></Header>
     <Body>
       <Card align="flex-start">
         <CourseWrapper>
           <select id="myCourseNumberSelect">
-            <option value='5'>277기</option>
+            {
+              courseList.map(course => (
+                <option value={course.courseSeq} key={course.courseSeq} selected={course.selected}>{course.courseNumber}기</option>
+              ))
+            }
           </select>
-          <h1>자바 클라우드 개발자 과정</h1>
-          <h2>24.02.27 ~ 24.07.24</h2>
+          <h1>{course.courseName}</h1>
+          <h2>{course.startDate} ~ {course.endDate}</h2>
         </CourseWrapper>
       </Card>
       <Card>
@@ -113,28 +163,15 @@ const PointPage = () => {
               </tr>
             </thead>
             <tbody>
-              <PointRow date='24.06.12' category='시험치기 응시' point='10'></PointRow>
-              <PointRow date='24.06.14' category='자격증 합격' point='5'></PointRow>
-              <PointRow date='24.06.12' category='시험치기 응시' point='10'></PointRow>
-              <PointRow date='24.06.14' category='자격증 합격' point='5'></PointRow>
-              <PointRow date='24.06.12' category='시험치기 응시' point='10'></PointRow>
-              <PointRow date='24.06.14' category='자격증 합격' point='5'></PointRow>
-              <PointRow date='24.06.12' category='시험치기 응시' point='10'></PointRow>
-              <PointRow date='24.06.14' category='자격증 합격' point='5'></PointRow>
-              <PointRow date='24.06.12' category='시험치기 응시' point='10'></PointRow>
-              <PointRow date='24.06.14' category='자격증 합격' point='5'></PointRow>
-              <PointRow date='24.06.12' category='시험치기 응시' point='10'></PointRow>
-              <PointRow date='24.06.14' category='자격증 합격' point='5'></PointRow>
-              <PointRow date='24.06.12' category='시험치기 응시' point='10'></PointRow>
-              <PointRow date='24.06.14' category='자격증 합격' point='5'></PointRow>
-              <PointRow date='24.06.12' category='시험치기 응시' point='10'></PointRow>
-              <PointRow date='24.06.14' category='자격증 합격' point='5'></PointRow>
+              {pointHistory.map((point, key) => (
+                <PointRow date={point.date} category={point.category} point={point.point} key={key}></PointRow>
+              ))}
             </tbody>
             <tfoot>
               <tr>
                 <td>총 적립액</td>
                 <td></td>
-                <td>80</td>
+                <td>{pointHistory.reduce((acc, point) => acc + point.point, 0)}</td>
               </tr>
             </tfoot>
           </table>
