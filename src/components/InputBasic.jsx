@@ -28,7 +28,7 @@ const InputBasic = (props) => {
 InputBasic.propTypes = {
   text: PropTypes.string,
   width: PropTypes.string,
-  height: PropTypes.number,
+  height: PropTypes.string,
   searchIcon: PropTypes.bool,
   editInput: PropTypes.bool,
   type: PropTypes.string,
