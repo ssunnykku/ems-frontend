@@ -1,13 +1,27 @@
 import styled from 'styled-components';
-import RoundButton from '../../components/RoundButton';
-import InputBasic from '../../components/InputBasic';
+import RoundButton from '../components/RoundButton';
+import InputBasic from '../components/InputBasic';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import * as Api from '../utils/api.js';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [hrdNetId, setHrdNetId] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  // sessionStorage.setItem('userToken', jwtToken);
+
+  useEffect(() => {}, []);
+
+  const loginAction = () => {
+    Api.post('students/login', {
+      hrdNetId: hrdNetId,
+      password: password,
+    }).then(() => {
+      navigate('/myPage');
+    });
+  };
 
   return (
     <LoginPageWrapper>
@@ -21,11 +35,11 @@ const Login = () => {
       <LoginForm>
         <InputTagWrapper>
           <InputBasic
-            text="Email"
-            type={'email'}
-            value={email}
+            text="HrdNetId"
+            type={'hrdNetId'}
+            value={hrdNetId}
             onChange={(event) => {
-              setEmail(event.target.value);
+              setHrdNetId(event.target.value);
             }}
           />
           <InputBasic
@@ -38,7 +52,13 @@ const Login = () => {
           />
         </InputTagWrapper>
         <LoginBtnWrapper>
-          <RoundButton text={'Log in'} type={'primary'} action={() => {}} />
+          <RoundButton
+            text={'Log in'}
+            type={'primary'}
+            action={() => {
+              loginAction();
+            }}
+          />
         </LoginBtnWrapper>
       </LoginForm>
     </LoginPageWrapper>

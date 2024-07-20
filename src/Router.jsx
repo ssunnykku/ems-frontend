@@ -1,8 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Error from './pages/Error';
 import NotFoundPage from './pages/NotFoundPage';
-import Login from './pages/auth/Login.jsx';
-import Home from './pages/Home.jsx';
+import Login from './pages/Login.jsx';
 import Mypage from './pages/Mypage.jsx';
 import CoursePage from './pages/CoursePage.jsx';
 import AttendancePage from './pages/AttendancePage.jsx';
@@ -10,12 +9,7 @@ import PointPage from './pages/PointPage.jsx';
 
 const Router = createBrowserRouter([
   {
-    path: '/',
-    element: <Home />,
-    errorElement: <Error />,
-  },
-  {
-    path: '/auth/login',
+    path: '/login',
     element: <Login />,
     errorElement: <Error />,
   },
