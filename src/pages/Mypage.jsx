@@ -4,11 +4,8 @@ import Card from '../components/Card';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import FullPageModal from '../components/FullPageModal';
-import Loading from '../components/Loading';
 import InputBasic from '../components/InputBasic';
-import { axiosLogin, axiosGetStudent } from '../apis/MyPageService.jsx';
-import { getCookie } from '../utils/Cookie.js';
-// import { axiosGetStudent } from '../apis/MyPageService';
+
 const BASE_URL = import.meta.env.BASE_URL;
 
 /* 학생정보 카드 */
@@ -123,18 +120,6 @@ const EditStudentInfoRow = styled.div`
   }
 `;
 const Mypage = () => {
-  axiosLogin('solsol5390', '1234')
-    .then((res) => {
-      {
-        console.log(res.data.result);
-      }
-    })
-    .then(() => {
-      axiosGetStudent().then((res) => {
-        console.log('여기' + res);
-      });
-    });
-
   return (
     <>
       <Header title={'마이페이지'}></Header>
