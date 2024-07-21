@@ -4,10 +4,104 @@ import Card from "../components/Card";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Palette from "../styles/Palette";
-import { useState } from "react";
+import {useEffect, useState} from "react";
+import * as Api from "../utils/api.js";
 
 const PointPage = () => {
-  const CourseWrapper = styled.div`
+  const [selected, setSelected] = useState('');
+  const [courseInfo, setCourseInfo] = useState({});
+  const [courseList, setCourseList] =  useState ([])
+
+  useEffect(() => {
+    Api.get('course-list').then((res)=> {
+          setCourseList(res.result);
+          if (res.result.length > 0) {
+            setSelected(res.result[0].courseNumber);
+            setCourseInfo(res.result[0]);
+          }
+    }
+    )
+  }, []);
+
+  useEffect(()=>{
+
+    Api.get('point-history?courseSeq='+courseInfo.courseSeq).then((res)=>{
+      setPointHistory(res.result);
+    })
+  },[selected,courseInfo])
+
+
+  const handleSelected = (e) => {
+    setSelected(e.target.value);
+    courseList.map((data)=>{
+      e.target.value.slice(-3) == data.courseNumber ? setCourseInfo(data) : '';
+    })
+  }
+
+  const [pointHistory, setPointHistory] = useState([])
+
+  return <>
+    <Header title={"포인트 조회"}></Header>
+    <Body>
+      <Card align="flex-start">
+        <CourseWrapper>
+          <select onChange={handleSelected} value={selected}>
+            {
+              courseList.map(course => (
+                <option value={course.courseNumber} key={course.courseNumber} selected={course.selected}>{course.courseNumber}기</option>
+              ))
+            }
+          </select>
+          <h1>{courseInfo.courseName}</h1>
+          <h2>{courseInfo.startDate} ~ {courseInfo.endDate}</h2>
+        </CourseWrapper>
+      </Card>
+      <Card>
+        <PointWrapper>
+          <h1>포인트 적립내역</h1>
+          <table>
+            <thead>
+              <tr>
+                <td>적립일</td>
+                <td>항목</td>
+                <td>포인트</td>
+              </tr>
+            </thead>
+            <tbody>
+              {pointHistory.map((point, key) => (
+                <PointRow date={point.date} category={point.category} point={point.point} key={key}></PointRow>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr>
+                <td>총 적립액</td>
+                <td></td>
+                <td>{pointHistory.reduce((acc, point) => acc + point.point, 0)}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </PointWrapper>
+      </Card>
+    </Body>
+    <Footer currentPage="pointPage"></Footer>
+  </>;
+};
+
+export default PointPage;
+
+
+const PointRow = ({ date, category, point }) => {
+  return (
+      <tr>
+        <td>{date}</td>
+        <td>{category}</td>
+        <td>{point}</td>
+      </tr>
+  )
+}
+
+
+const CourseWrapper = styled.div`
     width: 100%;
     height: 100%;
     display: flex;
@@ -37,7 +131,7 @@ const PointPage = () => {
       font-weight: 500;
     }
   `;
-  const PointWrapper = styled.div`
+const PointWrapper = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -82,104 +176,3 @@ const PointPage = () => {
       }
     }
     `;
-
-  const PointRow = ({ date, category, point }) => {
-    return (
-      <tr>
-        <td>{date}</td>
-        <td>{category}</td>
-        <td>{point}</td>
-      </tr>
-    )
-  }
-
-
-  // 테스트 데이터
-  const [course, setCourse] = useState({
-    courseName: "자바 클라우드 개발자 과정",
-    startDate: "24.02.27",
-    endDate: "24.07.24"
-  })
-  const courseList = [
-    {
-      courseSeq: 5,
-      courseNumber: 277,
-      selected: true
-    },
-    {
-      courseSeq: 6,
-      courseNumber: 278,
-      selected: false
-    },
-    {
-      courseSeq: 7,
-      courseNumber: 279,
-      selected: false
-    },
-    {
-      courseSeq: 8,
-      courseNumber: 280,
-      selected: false
-    },
-  ]
-  const [pointHistory, setPointHistory] = useState([
-    {
-      date: "24.06.12",
-      category: "자격증 합격",
-      point: 10
-    },
-    {
-      date: "24.06.13",
-      category: "자격증 합격",
-      point: 10
-    }
-  ])
-
-  return <>
-    <Header title={"포인트 조회"}></Header>
-    <Body>
-      <Card align="flex-start">
-        <CourseWrapper>
-          <select id="myCourseNumberSelect">
-            {
-              courseList.map(course => (
-                <option value={course.courseSeq} key={course.courseSeq} selected={course.selected}>{course.courseNumber}기</option>
-              ))
-            }
-          </select>
-          <h1>{course.courseName}</h1>
-          <h2>{course.startDate} ~ {course.endDate}</h2>
-        </CourseWrapper>
-      </Card>
-      <Card>
-        <PointWrapper>
-          <h1>포인트 적립내역</h1>
-          <table>
-            <thead>
-              <tr>
-                <td>적립일</td>
-                <td>항목</td>
-                <td>포인트</td>
-              </tr>
-            </thead>
-            <tbody>
-              {pointHistory.map((point, key) => (
-                <PointRow date={point.date} category={point.category} point={point.point} key={key}></PointRow>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr>
-                <td>총 적립액</td>
-                <td></td>
-                <td>{pointHistory.reduce((acc, point) => acc + point.point, 0)}</td>
-              </tr>
-            </tfoot>
-          </table>
-        </PointWrapper>
-      </Card>
-    </Body>
-    <Footer currentPage="pointPage"></Footer>
-  </>;
-};
-
-export default PointPage;

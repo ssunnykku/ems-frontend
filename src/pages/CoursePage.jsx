@@ -3,9 +3,10 @@ import Body from "../components/Body";
 import Card from "../components/Card";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import {useEffect, useState} from "react";
+import * as Api from "../utils/api.js";
 
-const CourseCard = ({ course }) => {
-  const CourseCardWrapper = styled.div`
+const CourseCardWrapper = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -13,7 +14,7 @@ const CourseCard = ({ course }) => {
     padding: 0 0.6153rem;
     margin: -0.6153rem 0;
   `;
-  const CourseTitle = styled.div`
+const CourseTitle = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -35,9 +36,8 @@ const CourseCard = ({ course }) => {
       font-weight: bold;
      }
   `;
-  const attendanceRate = (course.attendanceDays / course.totalTrainingDays) * 100;
-  const statusKr = course.status == -1 ? "수강 취소" : course.status == 0 ? "현재 수강중" : "수료 완료";
-  const ProgressWrapper = styled.div`
+
+const ProgressWrapper = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -47,17 +47,24 @@ const CourseCard = ({ course }) => {
       font-weight: bold;
     }
   `;
+
+const CourseCard = ({ course }) => {
+
+
+  const attendanceRate = (course.attendanceDays / course.totalTrainingDays) * 100;
+  const statusKr = course.status == -1 ? "수강 취소" : course.status == 0 ? "현재 수강중" : "수료 완료";
+
   return (
     <Card>
       <CourseCardWrapper>
         <CourseTitle>
           <h2 className={course.status == 0 ? "current" : ""}>{statusKr}</h2>
-          <h1>{course.number}기 {course.name}</h1>
+          <h1>{course.courseNumber}기 {course.courseName}</h1>
           <h2>{course.startDate} ~ {course.endDate}</h2>
         </CourseTitle>
         {course.status == 0 ? <ProgressWrapper><ProgressBar val={attendanceRate}></ProgressBar><span>{attendanceRate}%</span></ProgressWrapper> : null}
         <BasicInfoTable>
-          <BasicInfoRow><span>구분</span><span>{course.type}</span></BasicInfoRow>
+          <BasicInfoRow><span>구분</span><span>{course.courseType}</span></BasicInfoRow>
           <BasicInfoRow><span>교육 과목</span><span>{course.subject}</span></BasicInfoRow>
           <BasicInfoRow><span>총 교육일수</span><span>{course.totalTrainingDays}일</span></BasicInfoRow>
           <BasicInfoRow><span>일일 교육시간</span><span>{course.trainingHoursPerDay}시간</span></BasicInfoRow>
@@ -112,38 +119,51 @@ justify-content: space-between;
   font-weight: bold;
 }`;
 
-// 샘플 데이터
-const courses = [{
-  name: "자바 클라우드 개발자 과정",
-  number: 277,
-  type: "구직자 무료",
-  subject: "JAVA",
-  totalTrainingDays: 100,
-  trainingHoursPerDay: 8,
-  professorName: "홍길동",
-  startDate: "24.02.28",
-  endDate: "24.07.24",
-  attendanceDays: 62,
-  status: "0"
-},{
-  name: "자바 클라우드 개발자 과정",
-  number: 276,
-  type: "재직자 유료",
-  subject: "JAVA",
-  totalTrainingDays: 30,
-  trainingHoursPerDay: 8,
-  professorName: "홍길동",
-  startDate: "23.02.28",
-  endDate: "23.07.24",
-  attendanceDays: 25,
-  status: 1
-}]
+
+
 const CoursePage = () => {
+
+  // const courses = [{
+  //   name: "자바 클라우드 개발자 과정",
+  //   number: 277,
+  //   type: "구직자 무료",
+  //   subject: "JAVA",
+  //   totalTrainingDays: 100,
+  //   trainingHoursPerDay: 8,
+  //   professorName: "홍길동",
+  //   startDate: "24.02.28",
+  //   endDate: "24.07.24",
+  //   attendanceDays: 62,
+  //   status: "0"
+  // },{
+  //   name: "자바 클라우드 개발자 과정",
+  //   number: 276,
+  //   type: "재직자 유료",
+  //   subject: "JAVA",
+  //   totalTrainingDays: 30,
+  //   trainingHoursPerDay: 8,
+  //   professorName: "홍길동",
+  //   startDate: "23.02.28",
+  //   endDate: "23.07.24",
+  //   attendanceDays: 25,
+  //   status: 1
+  // }]
+
+  const [courses, setCourses] = useState([]);
+
+
+  useEffect(() => {
+    Api.get('course-list').then((res)=> {
+      setCourses(res.result);
+      console.log(res.result);
+    });
+  }, []);
+
   return <>
     <Header title="수강 이력"></Header>
     <Body>
       {courses.map(course => (
-        <CourseCard course={course}></CourseCard>
+        <CourseCard course={course} key={course.courseNumber}></CourseCard>
       ))
       }
     </Body>
