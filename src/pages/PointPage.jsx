@@ -10,7 +10,9 @@ import * as Api from "../utils/api.js";
 const PointPage = () => {
   const [selected, setSelected] = useState('');
   const [courseInfo, setCourseInfo] = useState({});
-  const [courseList, setCourseList] =  useState ([])
+  const [courseList, setCourseList] =  useState ([]);
+  const [pointHistory, setPointHistory] = useState([]);
+
 
   useEffect(() => {
     Api.get('course-list').then((res)=> {
@@ -37,8 +39,6 @@ const PointPage = () => {
       e.target.value.slice(-3) == data.courseNumber ? setCourseInfo(data) : '';
     })
   }
-
-  const [pointHistory, setPointHistory] = useState([])
 
   return <>
     <Header title={"포인트 조회"}></Header>
