@@ -10,7 +10,6 @@ const Login = () => {
   const [hrdNetId, setHrdNetId] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  // sessionStorage.setItem('userToken', jwtToken);
 
   useEffect(() => {}, []);
 
@@ -18,7 +17,8 @@ const Login = () => {
     Api.post('students/login', {
       hrdNetId: hrdNetId,
       password: password,
-    }).then(() => {
+    }).then((res) => {
+      localStorage.setItem('userToken', res.result);
       navigate('/myPage');
     });
   };

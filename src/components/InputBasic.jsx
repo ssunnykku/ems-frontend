@@ -40,18 +40,18 @@ InputBasic.propTypes = {
 };
 
 const InputWrapper = ({width, children}) => {
-  const Temp = styled.div`
-  width: ${width};
+
+  return (
+    <Temp width={width}>{children}</Temp>
+  )
+}
+
+const Temp = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 `;
-  return (
-    <Temp>{children}</Temp>
-  )
-}
-  
 
 const SearchIcon = styled.i`
   position: relative;

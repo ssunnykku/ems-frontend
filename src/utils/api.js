@@ -4,9 +4,15 @@ const BASE_URL = 'http://127.0.0.1:8080/api/';
 
 axios.defaults.baseURL = BASE_URL;
 axios.defaults.headers.common['Content-Type'] = 'application/json';
-axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem(
-  'userToken'
-)}`;
+
+const setAuthorizationHeader = () => {
+  const token = localStorage.getItem('userToken');
+  if (token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  } else {
+    delete axios.defaults.headers.common['Authorization'];
+  }
+};
 
 const handleResponse = (response) => response.data;
 const handleError = (error) => {
@@ -16,8 +22,15 @@ const handleError = (error) => {
 
 async function get(endpoint, params = {}) {
   console.log(`%cGET 요청: ${BASE_URL + endpoint}`, 'color: #a25cd1;');
+  // setAuthorizationHeader();
   try {
-    const response = await axios.get(endpoint, { params });
+    const token = localStorage.getItem('userToken');
+    const response = await axios.get(endpoint, {
+      params,
+      headers: {
+        'Authorization': token ? `Bearer ${token}` : '',
+      },
+    });
     return handleResponse(response);
   } catch (error) {
     return handleError(error);
@@ -27,6 +40,7 @@ async function get(endpoint, params = {}) {
 async function post(endpoint, data) {
   console.log(`%cPOST 요청: ${BASE_URL + endpoint}`, 'color: #296aba;');
   console.log(`%cPOST 요청 데이터: ${JSON.stringify(data)}`, 'color: #296aba;');
+  setAuthorizationHeader();
   try {
     const response = await axios.post(endpoint, data);
     return handleResponse(response);
@@ -38,6 +52,7 @@ async function post(endpoint, data) {
 async function put(endpoint, data) {
   console.log(`%cPUT 요청: ${BASE_URL + endpoint}`, 'color: #059c4b;');
   console.log(`%cPUT 요청 데이터: ${JSON.stringify(data)}`, 'color: #059c4b;');
+  setAuthorizationHeader();
   try {
     const response = await axios.put(endpoint, data);
     return handleResponse(response);
@@ -48,6 +63,7 @@ async function put(endpoint, data) {
 
 async function del(endpoint, params = {}) {
   console.log(`DELETE 요청: ${BASE_URL + endpoint}`);
+  setAuthorizationHeader();
   try {
     const response = await axios.delete(endpoint, { params });
     return handleResponse(response);

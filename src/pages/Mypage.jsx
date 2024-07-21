@@ -7,7 +7,6 @@ import FullPageModal from '../components/FullPageModal';
 import InputBasic from '../components/InputBasic';
 
 const TimeTable = ({ open, close }) => {
-
   return (
     <TimeTableWrapper>
       <TimeColumn>
@@ -23,7 +22,6 @@ const TimeTable = ({ open, close }) => {
     </TimeTableWrapper>
   );
 };
-
 
 const Mypage = () => {
   return (
@@ -146,26 +144,26 @@ const Mypage = () => {
 export default Mypage;
 
 const TimeTableWrapper = styled.div`
-    display: flex;
-    column-gap: 1rem;
-    height: 2.6667rem;
+  display: flex;
+  column-gap: 1rem;
+  height: 2.6667rem;
 
-    font-size: 0.8205rem;
-  `;
+  font-size: 0.8205rem;
+`;
 const TimeColumn = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  margin: 0;
+  div {
+    padding: 0 0.48rem;
     margin: 0;
-    div {
-      padding: 0 0.48rem;
-      margin: 0;
-    }
-    hr {
-      color: #e7e7e7;
-    }
-  `;
+  }
+  hr {
+    color: #e7e7e7;
+  }
+`;
 
 /* 학생정보 카드 */
 const StudentInfoRow = styled.div`
