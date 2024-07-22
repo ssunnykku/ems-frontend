@@ -3,7 +3,7 @@ import Body from "../components/Body";
 import Card from "../components/Card";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import * as Api from "../utils/api.js";
 
 
@@ -77,21 +77,32 @@ const AttendanceRow = ({date, status}) => {
       </tr>
   )
 }
-
+function dateFormat(date) {
+	let dateFormat2 = date.getFullYear() +
+		'-' + ( (date.getMonth()+1) < 9 ? "0" + (date.getMonth()+1) : (date.getMonth()+1) )+
+		'-' + ( (date.getDate()) < 9 ? "0" + (date.getDate()) : (date.getDate()) );
+	return dateFormat2;
+}
 const AttendancePage = () => {
 
   const [attendances, setAttendances] = useState([]);
 
+  //init Component
   useEffect(() => {
-    Api.get('attendance-list?date=' + '2024-07-19').then((res)=> {
-      setAttendances(res.result)
+    let monthRate = 0;
+    let totalRate = 0;
+    const dateFormatted = dateFormat(currentDate.current);
+    const promises = [Api.get('attendance-list?date=' + dateFormatted), Api.get('total-attendance-rate')];
+    Promise.all(promises).then( ([monthRes, totalRes]) => {
+      setRates({
+        monthRate: monthRes.monthAttendanceRate,
+        totalRate: totalRes.result
+      });
+      setAttendances(monthRes.result);
+      setMonth(currentDate.current.getMonth() + 1);
+    })
+    .catch(error => console.log(error));
 
-      const totalRate = rates.totalRate
-      const monthRate = res.monthAttendanceRate
-      let rateData = {monthRate, totalRate}
-      setRates(rateData)
-
-    });
   }, []);
 
 
@@ -100,24 +111,33 @@ const AttendancePage = () => {
     totalRate: 0
   });
 
-  useEffect(() => {
-  Api.get('/total-attendance-rate').then((res)=> {
-    const totalRate = res.result;
-    const monthRate = rates.monthRate;
-    let rateData = {monthRate, totalRate}
-    setRates(rateData)
-  })
-  }, []);
-
-  function initTotalRate(rate){
-    setRates({
-      ...rates,
-      totalRate: rate
-    })
+  const currentDate = useRef(new Date());
+  const [month, setMonth] = useState();
+  function updateAttendance(uDate){
+    Api.get('attendance-list?date=' + dateFormat(uDate)).then(res => {
+      if(res.result.length == 0){
+        // 애초에 상태 응답을 받아서 에러여부를 판별해야함.
+        // 이 상태로는 1달 내내 출석하지 않은 경우 문제 발생
+        throw new Error("출석기록이 없습니다.");
+      }
+      setAttendances(res.result);
+      setRates({
+        ...rates,
+        monthRate: res.monthAttendanceRate
+      });
+      setMonth(uDate.getMonth() + 1);
+      currentDate.current = uDate;
+    }).catch(err => console.log(err));
   }
-  const [month, setMonth] = useState(7);
   const prevMonth = () => {
-    setMonth
+    let month = new Date(currentDate.current);
+    month.setMonth(month.getMonth() - 1);
+    updateAttendance(month);
+  }
+  const nextMonth = () => {
+    let month = new Date(currentDate.current);
+    month.setMonth(month.getMonth() + 1);
+    updateAttendance(month);
   }
 
 
@@ -129,9 +149,9 @@ const AttendancePage = () => {
         <AttendanceWrapper>
           <div id="attendanceMonth">
             <input type="hidden" value='2024-07-01' name="currentMonth"/>
-            <LtSvg width='9' height='16'></LtSvg>
+            <LtSvg width='9' height='16' onClick={prevMonth}></LtSvg>
             <span>{month}월</span>
-            <GtSvg width='9' height='16'></GtSvg>
+            <GtSvg width='9' height='16' onClick={nextMonth}></GtSvg>
           </div>
           <h1>진행률</h1>
           <BasicInfoTable>
