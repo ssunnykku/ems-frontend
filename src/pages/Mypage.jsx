@@ -66,7 +66,7 @@ const AttendanceCardBody = styled.div`
   }
 `;
 
-const TimeTable = ({ open, close}) => {
+const TimeTable = ({ open, close }) => {
   const TimeTableWrapper = styled.div`
     display: flex;
     column-gap: 1rem;
@@ -139,16 +139,18 @@ const Mypage = () => {
     const formData = new FormData(e.target);
     let phoneNumber = formData.get("phoneNumber");
     formData.delete("phoneNumber");
-    formData.append("phoneNumber", phoneNumber.replace(/-/g,""));
+    formData.append("phoneNumber", phoneNumber.replace(/-/g, ""));
     Api.put("student", formData).then(res => {
-      if(res.result == false){
-        throw new Error("비밀번호가 잘못되었습니다.")
+      if (res.result == false) {
+        setErrorMessage("비밀번호가 잘못되었습니다.");
+      }else{
+        updateStudnetInfo();
+        setErrorMessage("");
       }
-      updateStudnetInfo();
     }).catch(err => console.error(err));
 
   }
-  function updateStudnetInfo(){
+  function updateStudnetInfo() {
     Api.get("student").then(res => {
       let phoneNum = res.result.phoneNumber;
       phoneNum.repl
@@ -156,17 +158,17 @@ const Mypage = () => {
         name: res.result.name,
         hrdNetId: res.result.hrdNetId,
         birthDate: res.result.birth,
-      phoneNumber: Utils.addHyphenToPhoneNumber(res.result.phoneNumber),
-      bank: res.result.bank,
-      accountNumber: res.result.account,
-      email: res.result.email
+        phoneNumber: Utils.addHyphenToPhoneNumber(res.result.phoneNumber),
+        bank: res.result.bank,
+        accountNumber: res.result.account,
+        email: res.result.email
       });
     })
   }
-  function initAttendanceTimeCard(){
+  function initAttendanceTimeCard() {
     const promises = [Api.get("current-course"), Api.get("time")];
     Promise.all(promises).then(([courseRes, timeRes]) => {
-      if(courseRes.result == false){
+      if (courseRes.result == false) {
         throw new Error("현재 수강중인 과정이 없습니다.");
       }
       setCurrentCourse({
@@ -202,29 +204,40 @@ const Mypage = () => {
       email: "test@test.com"
     }
   );
-  function handleAttendanceBtn(){
+  const [errorMessage, setErrorMessage] = useState();
+  const ErrorMessage = styled.div`
+    width: 100%;
+    height: 1rem;
+    font-size: 0.8rem;
+    margin: 0.6rem 0 -0.6rem 0;
+    color: red;
+    display: flex;
+    text-align: left;
+
+  `;
+  function handleAttendanceBtn() {
     //입실버튼
-    if(times.inTime == null){
+    if (times.inTime == null) {
       console.log("입실");
       Api.post("in-time").then(res => {
-        if(res.result){
+        if (res.result) {
           updateTimeStatus();
-        }else{
+        } else {
           throw new Error("입실 등록에 실패하였습니다.");
         }
       })
-    }else if(times.outTime == null){
+    } else if (times.outTime == null) {
       Api.post("out-time").then(res => {
-        if(res.result){
+        if (res.result) {
           updateTimeStatus();
-        }else{
+        } else {
           throw new Error("퇴실 등록에 실패하였습니다.");
         }
       })
     }
     //퇴실버튼
   }
-  function updateTimeStatus(){
+  function updateTimeStatus() {
     Api.get("time").then(res => {
       setTimes({
         inTime: res.result.inTime,
@@ -268,7 +281,7 @@ const Mypage = () => {
               <h1>{currentCourse.courseName}</h1>
               <h2>{currentCourse.courseStartDate} ~ {currentCourse.courseEndDate}</h2>
             </div>
-            <TimeTable open={times.inTime && times.inTime.slice(0,-3)} close={times.outTime && times.outTime.slice(0,-3)}></TimeTable>
+            <TimeTable open={times.inTime && times.inTime.slice(0, -3)} close={times.outTime && times.outTime.slice(0, -3)}></TimeTable>
             <BlueBtn type='button' onClick={handleAttendanceBtn} className={times.outTime != null && 'disabled'} disabled={times.outTime != null}>{times.outTime != null ? "출석 완료" : times.inTime != null ? "퇴실" : "입실"}</BlueBtn>
           </AttendanceCardBody>
         </Card>
@@ -345,13 +358,14 @@ const Mypage = () => {
               </EditStudentInfoRow>
               <EditStudentInfoRow>
                 <span>새 비밀번호</span>
-                <InputBasic height="1.8461" name="newPassword" width="7.7rem"></InputBasic>
+                <InputBasic height="1.8461" type='password' name="newPassword" width="7.7rem"></InputBasic>
               </EditStudentInfoRow>
               <EditStudentInfoRow>
                 <span>비밀번호 확인</span>
-                <InputBasic height="1.8461" width="7.7rem"></InputBasic>
+                <InputBasic height="1.8461" type='password' width="7.7rem"></InputBasic>
               </EditStudentInfoRow>
             </BasicInfoTable>
+            <ErrorMessage>{errorMessage}</ErrorMessage>
             <EditBtn>내 정보 수정하기</EditBtn>
           </form>
         </Card>
