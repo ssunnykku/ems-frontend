@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import FullPageModal from '../components/FullPageModal';
 import InputBasic from '../components/InputBasic';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as Api from "../utils/api.js";
 import * as Utils from "../utils/utils.js";
 
@@ -111,6 +111,10 @@ const BlueBtn = styled.button`
   border-radius: 0.307rem;
   color: white;
   font-size: 0.7194rem;
+
+  &.disabled{
+    background-color: #999999;
+  }
 `;
 
 // 모달
@@ -156,6 +160,35 @@ const Mypage = () => {
       });
     })
   }
+  function initAttendanceTimeCard(){
+    const promises = [Api.get("current-course"), Api.get("time")];
+    Promise.all(promises).then(([courseRes, timeRes]) => {
+      if(courseRes.result == false){
+        throw new Error("현재 수강중인 과정이 없습니다.");
+      }
+      setCurrentCourse({
+        courseName: courseRes.result.courseName,
+        courseStartDate: courseRes.result.courseStartDate,
+        courseEndDate: courseRes.result.courseEndDate
+      });
+      setTimes({
+        inTime: timeRes.result.inTime,
+        outTime: timeRes.result.outTime
+      })
+    }).catch(err => {
+      //카드 비우기
+    })
+  }
+  const [isdisabledTimeBtn, setIsDisabledTimeBtn] = useState(false);
+  const [currentCourse, setCurrentCourse] = useState({
+    courseName: "현재 수강중인 코스가 없습니다.",
+    courseStartDate: "",
+    courseEndDate: ""
+  });
+  const [times, setTimes] = useState({
+    inTime: "",
+    outTime: ""
+  });
   const [student, setStudent] = useState(
     {
       name: "로그인 필요",
@@ -169,7 +202,7 @@ const Mypage = () => {
   );
   useEffect(() => {
     updateStudnetInfo();
-    
+    initAttendanceTimeCard();
   }, []);
   return (
     <>
@@ -200,11 +233,11 @@ const Mypage = () => {
           <Title>출석 입력</Title>
           <AttendanceCardBody>
             <div>
-              <h1>자바 클라우드 개발자 과정</h1>
-              <h2>24.02.27 ~ 24.07.24</h2>
+              <h1>{currentCourse.courseName}</h1>
+              <h2>{currentCourse.courseStartDate} ~ {currentCourse.courseEndDate}</h2>
             </div>
-            <TimeTable open={'13:13'} close={'15:15'}></TimeTable>
-            <BlueBtn>입실</BlueBtn>
+            <TimeTable open={times.inTime} close={times.outTime}></TimeTable>
+            <BlueBtn className={isdisabledTimeBtn && 'disabled'} disabled={isdisabledTimeBtn}>입실</BlueBtn>
           </AttendanceCardBody>
         </Card>
       </Body>
