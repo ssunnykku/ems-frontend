@@ -5,6 +5,9 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import FullPageModal from '../components/FullPageModal';
 import InputBasic from '../components/InputBasic';
+import { useEffect, useState } from 'react';
+import * as Api from "../utils/api.js";
+import * as Utils from "../utils/utils.js";
 
 const BASE_URL = import.meta.env.BASE_URL;
 
@@ -117,9 +120,57 @@ const EditStudentInfoRow = styled.div`
   justify-content: space-between;
   & span {
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
   }
 `;
+
 const Mypage = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    let phoneNumber = formData.get("phoneNumber");
+    formData.delete("phoneNumber");
+    formData.append("phoneNumber", phoneNumber.replace(/-/g,""));
+    Api.put("student", formData).then(res => {
+      if(res.result == false){
+        throw new Error("비밀번호가 잘못되었습니다.")
+      }
+      updateStudnetInfo();
+    }).catch(err => console.error(err));
+
+  }
+  function updateStudnetInfo(){
+    Api.get("student").then(res => {
+      let phoneNum = res.result.phoneNumber;
+      phoneNum.repl
+      setStudent({
+        name: res.result.name,
+        hrdNetId: res.result.hrdNetId,
+        birthDate: res.result.birth,
+      phoneNumber: Utils.addHyphenToPhoneNumber(res.result.phoneNumber),
+      bank: res.result.bank,
+      accountNumber: res.result.account,
+      email: res.result.email
+      });
+    })
+  }
+  const [student, setStudent] = useState(
+    {
+      name: "로그인 필요",
+      hrdNetId: "로그인 필요",
+      birthDate: "0000.00.00",
+      phoneNumber: "010-1234-5678",
+      bank: "테스트은행",
+      accountNumber: "110-123-567890",
+      email: "test@test.com"
+    }
+  );
+  useEffect(() => {
+    updateStudnetInfo();
+    
+  }, []);
   return (
     <>
       <Header title={'마이페이지'}></Header>
@@ -128,19 +179,19 @@ const Mypage = () => {
           <BasicInfoTable>
             <StudentInfoRow>
               <span>이름</span>
-              <span>김선희</span>
+              <span>{student.name}</span>
             </StudentInfoRow>
             <StudentInfoRow>
               <span>HRD Net ID</span>
-              <span>sun</span>
+              <span>{student.hrdNetId}</span>
             </StudentInfoRow>
             <StudentInfoRow>
               <span>생년월일</span>
-              <span>1993.06.02</span>
+              <span>{student.birthDate}</span>
             </StudentInfoRow>
             <StudentInfoRow>
               <span>전화번호</span>
-              <span>010-1234-5678</span>
+              <span>{Utils.addHyphenToPhoneNumber(student.phoneNumber)}</span>
             </StudentInfoRow>
           </BasicInfoTable>
           <EditBtn popovertarget="editModal">내 정보 수정하기</EditBtn>
@@ -164,73 +215,80 @@ const Mypage = () => {
           <BasicInfoTable>
             <EditStudentInfoRow>
               <span>이름</span>
-              <span>김선희</span>
+              <span>{student.name}</span>
             </EditStudentInfoRow>
             <EditStudentInfoRow>
               <span>HRD Net ID</span>
-              <span>sun</span>
+              <span>{student.hrdNetId}</span>
             </EditStudentInfoRow>
             <EditStudentInfoRow>
               <span>생년월일</span>
-              <span>1993.06.02</span>
+              <span>{student.birthDate}</span>
             </EditStudentInfoRow>
           </BasicInfoTable>
         </Card>
         <Card>
-          <BasicInfoTable>
-            <EditStudentInfoRow>
-              <span>전화번호</span>
-              <InputBasic
-                height="1.8461"
-                width="7.7rem"
-                text="010-1234-5678"
-                type="tel"
-                title="전화번호 입력 형식이 맞지 않습니다. 다시한번 확인하시고 직원에게 문의하여주십시오."
-                required
-              ></InputBasic>
-            </EditStudentInfoRow>
-            <EditStudentInfoRow>
-              <span>은행</span>
-              <InputBasic
-                height="1.8461"
-                width="7.7rem"
-                text="신한"
-                required
-              ></InputBasic>
-            </EditStudentInfoRow>
-            <EditStudentInfoRow>
-              <span>계좌번호</span>
-              <InputBasic
-                height="1.8461"
-                width="7.7rem"
-                text="110614495839"
-                required
-              ></InputBasic>
-            </EditStudentInfoRow>
-            <EditStudentInfoRow>
-              <span>이메일</span>
-              <InputBasic
-                height="1.8461"
-                width="7.7rem"
-                text="ssunkyung@gmail.com"
-                type="email"
-                required
-              ></InputBasic>
-            </EditStudentInfoRow>
-            <EditStudentInfoRow>
-              <span>현재 비밀번호</span>
-              <InputBasic height="1.8461" width="7.7rem"></InputBasic>
-            </EditStudentInfoRow>
-            <EditStudentInfoRow>
-              <span>새 비밀번호</span>
-              <InputBasic height="1.8461" width="7.7rem"></InputBasic>
-            </EditStudentInfoRow>
-            <EditStudentInfoRow>
-              <span>비밀번호 확인</span>
-              <InputBasic height="1.8461" width="7.7rem"></InputBasic>
-            </EditStudentInfoRow>
-          </BasicInfoTable>
-          <EditBtn>내 정보 수정하기</EditBtn>
+          <form action='/mypage' onSubmit={handleSubmit}>
+            <BasicInfoTable>
+              <EditStudentInfoRow>
+                <span>전화번호</span>
+                <InputBasic
+                  height="1.8461"
+                  width="7.7rem"
+                  text={Utils.addHyphenToPhoneNumber(student.phoneNumber)}
+                  type="tel"
+                  title="전화번호 입력 형식이 맞지 않습니다. 다시한번 확인하시고 직원에게 문의하여주십시오."
+                  name="phoneNumber"
+                  required
+                ></InputBasic>
+              </EditStudentInfoRow>
+              <EditStudentInfoRow>
+                <span>은행</span>
+                <InputBasic
+                  height="1.8461"
+                  width="7.7rem"
+                  text={student.bank}
+                  name="bank"
+                  required
+                ></InputBasic>
+              </EditStudentInfoRow>
+              <EditStudentInfoRow>
+                <span>계좌번호</span>
+                <InputBasic
+                  height="1.8461"
+                  width="7.7rem"
+                  text={student.accountNumber}
+                  name="accountNumber"
+                  type='bankAccount'
+                  required
+                ></InputBasic>
+              </EditStudentInfoRow>
+              <EditStudentInfoRow>
+                <span>이메일</span>
+                <InputBasic
+                  height="1.8461"
+                  width="7.7rem"
+                  text={student.email}
+                  name="email"
+                  type="email"
+                  required
+                ></InputBasic>
+              </EditStudentInfoRow>
+              <EditStudentInfoRow>
+                <span>현재 비밀번호</span>
+                <InputBasic height="1.8461" width="7.7rem" name="currentPassword" required></InputBasic>
+              </EditStudentInfoRow>
+              <EditStudentInfoRow>
+                <span>새 비밀번호</span>
+                <InputBasic height="1.8461" name="newPassword" width="7.7rem"></InputBasic>
+              </EditStudentInfoRow>
+              <EditStudentInfoRow>
+                <span>비밀번호 확인</span>
+                <InputBasic height="1.8461" width="7.7rem"></InputBasic>
+              </EditStudentInfoRow>
+            </BasicInfoTable>
+            <EditBtn>내 정보 수정하기</EditBtn>
+          </form>
         </Card>
       </FullPageModal>
     </>
