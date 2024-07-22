@@ -66,7 +66,7 @@ const AttendanceCardBody = styled.div`
   }
 `;
 
-const TimeTable = ({ open, close }) => {
+const TimeTable = ({ open, close}) => {
   const TimeTableWrapper = styled.div`
     display: flex;
     column-gap: 1rem;
@@ -83,6 +83,9 @@ const TimeTable = ({ open, close }) => {
     div {
       padding: 0 0.48rem;
       margin: 0;
+    }
+    div:last-child{
+      height: 0.0943rem;
     }
     hr {
       color: #e7e7e7;
@@ -174,12 +177,11 @@ const Mypage = () => {
       setTimes({
         inTime: timeRes.result.inTime,
         outTime: timeRes.result.outTime
-      })
+      });
     }).catch(err => {
       //카드 비우기
     })
   }
-  const [isdisabledTimeBtn, setIsDisabledTimeBtn] = useState(false);
   const [currentCourse, setCurrentCourse] = useState({
     courseName: "현재 수강중인 코스가 없습니다.",
     courseStartDate: "",
@@ -200,6 +202,36 @@ const Mypage = () => {
       email: "test@test.com"
     }
   );
+  function handleAttendanceBtn(){
+    //입실버튼
+    if(times.inTime == null){
+      console.log("입실");
+      Api.post("in-time").then(res => {
+        if(res.result){
+          updateTimeStatus();
+        }else{
+          throw new Error("입실 등록에 실패하였습니다.");
+        }
+      })
+    }else if(times.outTime == null){
+      Api.post("out-time").then(res => {
+        if(res.result){
+          updateTimeStatus();
+        }else{
+          throw new Error("퇴실 등록에 실패하였습니다.");
+        }
+      })
+    }
+    //퇴실버튼
+  }
+  function updateTimeStatus(){
+    Api.get("time").then(res => {
+      setTimes({
+        inTime: res.result.inTime,
+        outTime: res.result.outTime
+      })
+    })
+  }
   useEffect(() => {
     updateStudnetInfo();
     initAttendanceTimeCard();
@@ -236,8 +268,8 @@ const Mypage = () => {
               <h1>{currentCourse.courseName}</h1>
               <h2>{currentCourse.courseStartDate} ~ {currentCourse.courseEndDate}</h2>
             </div>
-            <TimeTable open={times.inTime} close={times.outTime}></TimeTable>
-            <BlueBtn className={isdisabledTimeBtn && 'disabled'} disabled={isdisabledTimeBtn}>입실</BlueBtn>
+            <TimeTable open={times.inTime && times.inTime.slice(0,-3)} close={times.outTime && times.outTime.slice(0,-3)}></TimeTable>
+            <BlueBtn type='button' onClick={handleAttendanceBtn} className={times.outTime != null && 'disabled'} disabled={times.outTime != null}>{times.outTime != null ? "출석 완료" : times.inTime != null ? "퇴실" : "입실"}</BlueBtn>
           </AttendanceCardBody>
         </Card>
       </Body>
