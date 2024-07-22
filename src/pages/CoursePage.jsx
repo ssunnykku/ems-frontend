@@ -34,6 +34,9 @@ const CourseTitle = styled.div`
       text-align: left;
       font-size: 0.9rem;
       font-weight: bold;
+
+      word-break: keep-all;
+      
      }
   `;
 
@@ -62,7 +65,7 @@ const CourseCard = ({ course }) => {
           <h1>{course.courseNumber}기 {course.courseName}</h1>
           <h2>{course.startDate} ~ {course.endDate}</h2>
         </CourseTitle>
-        {course.status == 0 ? <ProgressWrapper><ProgressBar val={attendanceRate}></ProgressBar><span>{attendanceRate}%</span></ProgressWrapper> : null}
+        {course.status == 0 ? <ProgressWrapper><ProgressBar val={attendanceRate}></ProgressBar><span>{attendanceRate.toFixed(1)}%</span></ProgressWrapper> : null}
         <BasicInfoTable>
           <BasicInfoRow><span>구분</span><span>{course.courseType}</span></BasicInfoRow>
           <BasicInfoRow><span>교육 과목</span><span>{course.subject}</span></BasicInfoRow>
