@@ -77,21 +77,30 @@ const AttendanceRow = ({date, status}) => {
       </tr>
   )
 }
-
+function dateFormat(date) {
+	let dateFormat2 = date.getFullYear() +
+		'-' + ( (date.getMonth()+1) < 9 ? "0" + (date.getMonth()+1) : (date.getMonth()+1) )+
+		'-' + ( (date.getDate()) < 9 ? "0" + (date.getDate()) : (date.getDate()) );
+	return dateFormat2;
+}
 const AttendancePage = () => {
 
   const [attendances, setAttendances] = useState([]);
 
   useEffect(() => {
-    Api.get('attendance-list?date=' + '2024-07-19').then((res)=> {
-      setAttendances(res.result)
-
-      const totalRate = rates.totalRate
-      const monthRate = res.monthAttendanceRate
-      let rateData = {monthRate, totalRate}
-      setRates(rateData)
-
-    });
+    let monthRate = 0;
+    let totalRate = 0;
+    const date = new Date()
+    const dateFormatted = dateFormat(date);
+    const promises = [Api.get('attendance-list?date=' + dateFormat(date)), Api.get('total-attendance-rate')];
+    Promise.all(promises).then( ([monthRes, totalRes]) => {
+      setRates({
+        monthRate: monthRes.monthAttendanceRate,
+        totalRate: totalRes.result
+      });
+      setAttendances(monthRes.result);
+    })
+    .catch(error => console.log(error))
   }, []);
 
 
@@ -100,24 +109,9 @@ const AttendancePage = () => {
     totalRate: 0
   });
 
-  useEffect(() => {
-  Api.get('/total-attendance-rate').then((res)=> {
-    const totalRate = res.result;
-    const monthRate = rates.monthRate;
-    let rateData = {monthRate, totalRate}
-    setRates(rateData)
-  })
-  }, []);
-
-  function initTotalRate(rate){
-    setRates({
-      ...rates,
-      totalRate: rate
-    })
-  }
   const [month, setMonth] = useState(7);
   const prevMonth = () => {
-    setMonth
+    setMonth(prev => prev - 1);
   }
 
 
