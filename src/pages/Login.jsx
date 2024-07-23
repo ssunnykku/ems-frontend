@@ -18,6 +18,7 @@ const Login = () => {
       hrdNetId: hrdNetId,
       password: password,
     }).then((res) => {
+
       localStorage.setItem('userToken', res.result);
       navigate('/myPage');
     });
@@ -28,16 +29,17 @@ const Login = () => {
       <Link to="/">
         <LogoWrapper>
           <LogoImgWrapper>
-            <LogoImg src="#" />
+            <LogoImg src='/edu_logo.png'/>
           </LogoImgWrapper>
         </LogoWrapper>
       </Link>
       <LoginForm>
         <InputTagWrapper>
           <InputBasic
-            text="HrdNetId"
+            text="HRD-Net-Id"
             type={'hrdNetId'}
             value={hrdNetId}
+            height={3}
             onChange={(event) => {
               setHrdNetId(event.target.value);
             }}
@@ -46,6 +48,7 @@ const Login = () => {
             text="Password"
             type={'password'}
             value={password}
+            height={3}
             onChange={(event) => {
               setPassword(event.target.value);
             }}
@@ -72,23 +75,26 @@ const LogoWrapper = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  min-height: 8rem;
+  width: 100%;
+
 `;
 
 const LogoImgWrapper = styled.div`
   display: flex;
-  max-width: 100%;
-  max-height: 40vh;
   aspect-ratio: 1;
   justify-content: center;
   align-items: center;
-  gap: 1em;
+  gap: 1rem;
+  flex-direction: column;  
+  align-items: center;
+  justify-content: center;
+  padding-left: 5rem;
 `;
 
 const LogoImg = styled.img`
-  width: 100%;
-  max-width: 500px;
-  max-height: 500px;
-  aspect-ratio: 1;
+  object-fit:cover;
+  width: 16rem;
 `;
 
 const LoginPageWrapper = styled.div`
@@ -101,11 +107,11 @@ const LoginPageWrapper = styled.div`
 
 const LoginForm = styled.div`
   width: 100%;
-  min-height: 15rem;
+  min-height: 13rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 4rem;
+  gap: 1.5rem;
 `;
 
 const LoginBtnWrapper = styled.div`

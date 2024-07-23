@@ -1,9 +1,11 @@
 import axios from 'axios';
-// const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const BASE_URL = 'http://127.0.0.1:8080/api/';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 axios.defaults.baseURL = BASE_URL;
 axios.defaults.headers.common['Content-Type'] = 'application/json';
+axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('userToken')}`;
+
+axios.defaults.withCredentials = true;
 
 const setAuthorizationHeader = () => {
   const token = localStorage.getItem('userToken');
@@ -22,14 +24,12 @@ const handleError = (error) => {
 
 async function get(endpoint, params = {}) {
   console.log(`%cGET 요청: ${BASE_URL + endpoint}`, 'color: #a25cd1;');
-  // setAuthorizationHeader();
+  setAuthorizationHeader();
   try {
-    const token = localStorage.getItem('userToken');
+    // const token = localStorage.getItem('userToken');
+    // console.log("토큰 읽어"+token);
     const response = await axios.get(endpoint, {
       params,
-      headers: {
-        'Authorization': token ? `Bearer ${token}` : '',
-      },
     });
     return handleResponse(response);
   } catch (error) {
