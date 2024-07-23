@@ -9,7 +9,7 @@ const InputBasic = (props) => {
     <InputWrapper width={props.width}>
       {props.searchIcon && <SearchIcon className="bi bi-search"></SearchIcon>}
       <InputStyle
-        text={props.text}
+        $text={props.text}
         placeholder={props.text}
         style={{ height: `${props.height}rem` }}
         className={
@@ -43,18 +43,18 @@ InputBasic.propTypes = {
 };
 
 const InputWrapper = ({width, children}) => {
-  const Temp = styled.div`
-  width: ${width};
+
+  return (
+    <Temp width={width}>{children}</Temp>
+  )
+}
+
+const Temp = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 `;
-  return (
-    <Temp>{children}</Temp>
-  )
-}
-  
 
 const SearchIcon = styled.i`
   position: relative;

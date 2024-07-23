@@ -25,50 +25,7 @@ const GtSvg = ({ width, height, onClick }) => {
   )
 }
 
-const AttendanceTableWrapper = styled.div`
-  width: 100%;
-  padding: 0 0.6153rem;
-  display: flex;
-  flex-direction: column;
-  row-gap: 0.8205rem;
-    h1{
-      text-align: left;
-      font-weight: bold;
-      font-size: 1.0256rem;
 
-    }
-    & > table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8205rem;
-      overflow-y: scroll;
-      
-      thead td{
-        background-color: #E7E7E7;
-        border:none;
-        padding: 0.5128rem 0;
-        font-weight: bold;
-      }
-
-      & td{
-        max-width: 5.3rem;
-        padding: 0.5128rem 0;
-      }
-
-
-      & tr {
-        border-bottom: 0.0512rem solid #E7E7E7;
-      }
-      tfoot tr{
-        border-top: 0.1024rem solid #E7E7E7;
-        border-bottom: 0.1024rem solid #E7E7E7;
-
-        td{
-          font-weight: bold;
-        }
-      }
-    }
-  `;
 const AttendanceRow = ({date, status}) => {
   return (
       <tr>
@@ -221,5 +178,50 @@ const BasicInfoRow = styled.div`
     font-weight: bold;
   }
 `;
+
+const AttendanceTableWrapper = styled.div`
+  width: 100%;
+  padding: 0 0.6153rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.8205rem;
+    h1{
+      text-align: left;
+      font-weight: bold;
+      font-size: 1.0256rem;
+
+    }
+    & > table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8205rem;
+      overflow-y: scroll;
+      
+      thead td{
+        background-color: #E7E7E7;
+        border:none;
+        padding: 0.5128rem 0;
+        font-weight: bold;
+      }
+
+      & td{
+        max-width: 5.3rem;
+        padding: 0.5128rem 0;
+      }
+
+
+      & tr {
+        border-bottom: 0.0512rem solid #E7E7E7;
+      }
+      tfoot tr{
+        border-top: 0.1024rem solid #E7E7E7;
+        border-bottom: 0.1024rem solid #E7E7E7;
+
+        td{
+          font-weight: bold;
+        }
+      }
+    }
+  `;
 
 export default AttendancePage;
