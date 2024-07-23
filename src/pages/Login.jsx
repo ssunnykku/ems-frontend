@@ -36,19 +36,16 @@ const Login = () => {
       <LoginForm>
         <InputTagWrapper>
           <InputBasic
-            text="HRD-Net-Id"
-            type={'hrdNetId'}
+            type='text'
+            placeholder='HRD-Net-Id'
             value={hrdNetId}
-            height={3}
             onChange={(event) => {
               setHrdNetId(event.target.value);
             }}
           />
           <InputBasic
-            text="Password"
-            type={'password'}
+            type='password'
             value={password}
-            height={3}
             onChange={(event) => {
               setPassword(event.target.value);
             }}
