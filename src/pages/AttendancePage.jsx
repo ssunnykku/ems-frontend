@@ -128,10 +128,10 @@ const AttendancePage = () => {
               </tr>
             </thead>
             <tbody>
-              {
+              {attendances.length <= 0 ?
                 attendances.map((attendance, i) => (
                   <AttendanceRow date={attendance.date} status={attendance.status} key={i}></AttendanceRow>
-                ))
+                )) : <div></div>
               }
             </tbody>
           </table>
