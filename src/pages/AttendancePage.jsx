@@ -113,7 +113,7 @@ const AttendancePage = () => {
           <h1>진행률</h1>
           <BasicInfoTable>
             <BasicInfoRow><span>{month}월 출석률</span><span>{rates.monthRate}%</span></BasicInfoRow>
-            <BasicInfoRow><span>총 출석률</span><span>{rates.totalRate}%</span></BasicInfoRow>
+            <BasicInfoRow><span>총 출석률</span><span>{rates.totalRate.toFixed(1)}%</span></BasicInfoRow>
           </BasicInfoTable>
         </AttendanceWrapper>
       </Card>
@@ -161,6 +161,10 @@ const AttendanceWrapper = styled.div`
       font-weight: bold;
       color: #505050;
       margin: 0 1.1794rem;
+    }
+
+    svg:hover{
+      cursor: pointer;
     }
   `;
 
