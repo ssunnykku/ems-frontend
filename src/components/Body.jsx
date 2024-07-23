@@ -17,6 +17,7 @@ const BodyWrapper = styled.div`
   overflow-y: auto;
   background-color: #F8F8F8;
   padding: 1.641rem 1.0256rem;
+  overflow-x: hidden;
   
 `;
 export default Body;

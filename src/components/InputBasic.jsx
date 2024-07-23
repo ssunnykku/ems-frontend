@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import Palette from '../styles/Palette';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 const InputBasic = (props) => {
+
   return (
     <InputWrapper width={props.width}>
       {props.searchIcon && <SearchIcon className="bi bi-search"></SearchIcon>}
@@ -14,10 +16,11 @@ const InputBasic = (props) => {
           (props.searchIcon ? 'search ' : '') +
           (props.editInput ? 'editInput' : '')
         }
-        type={props.type}
+        type={props.type == 'bankAccount' ? 'text' : props.type}
         onChange={props.onChange}
-        value={props.value}
-        pattern = {props.type == 'tel' ? '[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}' : '.*'}
+        defaultValue={props.text}
+        name={props.name}
+        pattern = {props.type == 'tel' ? '[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}' : props.type == 'bankAccount' ? '[0-9]{10,14}$' : '.*'}
         title = {props.title}
         required={props.required}
       />

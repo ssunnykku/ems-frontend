@@ -1,10 +1,56 @@
-import styled, { keyframes } from 'styled-components';
-import Body from '../components/Body';
-import Card from '../components/Card';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
-import { useEffect, useState } from 'react';
-import * as Api from '../utils/api.js';
+
+import styled, { keyframes } from "styled-components";
+import Body from "../components/Body";
+import Card from "../components/Card";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import {useEffect, useState} from "react";
+import * as Api from "../utils/api.js";
+
+const CourseCardWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.0256rem;
+    padding: 0 0.6153rem;
+    margin: -0.6153rem 0;
+  `;
+const CourseTitle = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5128rem;
+    & > h2{
+      width: 100%;
+      text-align: left;
+      font-size: 0.8205rem;
+      font-weight: bold;
+      color: #999999;
+    }
+    & > h2.current{
+      color: #5C7CFA;
+    }
+     & > h1{
+      width: 100%;
+      text-align: left;
+      font-size: 0.9rem;
+      font-weight: bold;
+
+      word-break: keep-all;
+      
+     }
+  `;
+
+const ProgressWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    & > span{
+      margin-left: 1rem;
+      font-weight: bold;
+    }
+  `;
 
 const CourseCard = ({ course }) => {
   const attendanceRate =
@@ -28,12 +74,9 @@ const CourseCard = ({ course }) => {
             {course.startDate} ~ {course.endDate}
           </h2>
         </CourseTitle>
-        {course.status == 0 ? (
-          <ProgressWrapper>
-            <ProgressBar val={attendanceRate}></ProgressBar>
-            <span>{attendanceRate}%</span>
-          </ProgressWrapper>
-        ) : null}
+
+        {course.status == 0 ? <ProgressWrapper><ProgressBar val={attendanceRate}></ProgressBar><span>{attendanceRate.toFixed(1)}%</span></ProgressWrapper> : null}
+
         <BasicInfoTable>
           <BasicInfoRow>
             <span>구분</span>
