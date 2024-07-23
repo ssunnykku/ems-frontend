@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import Palette from '../styles/Palette';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 
 const InputBasic = (props) => {
 
@@ -18,7 +17,6 @@ const InputBasic = (props) => {
         }
         type={props.type == 'bankAccount' ? 'text' : props.type}
         onChange={props.onChange}
-        defaultValue={props.text}
         name={props.name}
         pattern = {props.type == 'tel' ? '[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}' : props.type == 'bankAccount' ? '[0-9]{10,14}$' : '.*'}
         title = {props.title}

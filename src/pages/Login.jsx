@@ -36,8 +36,8 @@ const Login = () => {
       <LoginForm>
         <InputTagWrapper>
           <InputBasic
-            text="HRD-Net-Id"
-            type={'hrdNetId'}
+            text='HRD-Net-Id'
+            type={'text'}
             value={hrdNetId}
             height={3}
             onChange={(event) => {
@@ -45,8 +45,8 @@ const Login = () => {
             }}
           />
           <InputBasic
-            text="Password"
-            type={'password'}
+            text='Password'
+            type='password'
             value={password}
             height={3}
             onChange={(event) => {
