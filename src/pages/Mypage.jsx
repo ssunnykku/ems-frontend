@@ -396,22 +396,3 @@ const AttendanceCardBody = styled.div`
     }
   }
 `;
-
-const BlueBtn = styled.button`
-  background-color: #5c7cfa;
-  width: 5.128rem;
-  height: 1.641rem;
-  border-radius: 0.307rem;
-  color: white;
-  font-size: 0.7194rem;
-`;
-
-// 모달
-const EditStudentInfoRow = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  & span {
-    font-weight: bold;
-  }
-`;

@@ -160,51 +160,6 @@ const CoursePage = () => {
 
 export default CoursePage;
 
-const CourseCardWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  row-gap: 1.0256rem;
-  padding: 0 0.6153rem;
-  margin: -0.6153rem 0;
-`;
-const CourseTitle = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  row-gap: 0.5128rem;
-
-  & > h2 {
-    width: 100%;
-    text-align: left;
-    font-size: 0.8205rem;
-    font-weight: bold;
-    color: #999999;
-  }
-
-  & > h2.current {
-    color: #5c7cfa;
-  }
-
-  & > h1 {
-    width: 100%;
-    text-align: left;
-    font-size: 0.9rem;
-    font-weight: bold;
-  }
-`;
-
-const ProgressWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-
-  & > span {
-    margin-left: 1rem;
-    font-weight: bold;
-  }
-`;
-
 const BasicInfoTable = styled.div`
   width: 100%;
   display: flex;
