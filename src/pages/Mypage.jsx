@@ -96,8 +96,6 @@ const Mypage = () => {
   }
   function updateStudnetInfo() {
     Api.get("student").then(res => {
-      let phoneNum = res.result.phoneNumber;
-      phoneNum.repl
       setStudent({
         name: res.result.name,
         hrdNetId: res.result.hrdNetId,
