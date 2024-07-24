@@ -1,23 +1,27 @@
 import styled from 'styled-components';
 import Palette from '../styles/Palette';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 const InputBasic = (props) => {
+
   return (
     <InputWrapper width={props.width}>
       {props.searchIcon && <SearchIcon className="bi bi-search"></SearchIcon>}
       <InputStyle
         text={props.text}
-        placeholder={props.text}
+        placeholder={props.placeholder}
         style={{ height: `${props.height}rem` }}
         className={
           (props.searchIcon ? 'search ' : '') +
           (props.editInput ? 'editInput' : '')
         }
-        type={props.type}
-        onChange={props.onChange}
         value={props.value}
-        pattern = {props.type == 'tel' ? '[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}' : '.*'}
+        type={props.type == 'bankAccount' ? 'text' : props.type}
+        onChange={props.onChange}
+        defaultValue={props.text}
+        name={props.name}
+        pattern = {props.type == 'tel' ? '[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}' : props.type == 'bankAccount' ? '[0-9]{10,14}$' : '.*'}
         title = {props.title}
         required={props.required}
       />
@@ -40,18 +44,18 @@ InputBasic.propTypes = {
 };
 
 const InputWrapper = ({width, children}) => {
-  const Temp = styled.div`
-  width: ${width};
+
+  return (
+    <Temp width={width}>{children}</Temp>
+  )
+}
+
+const Temp = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 `;
-  return (
-    <Temp>{children}</Temp>
-  )
-}
-  
 
 const SearchIcon = styled.i`
   position: relative;

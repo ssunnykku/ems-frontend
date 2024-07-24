@@ -1,36 +1,50 @@
 import styled from 'styled-components';
-import RoundButton from '../../components/RoundButton';
-import InputBasic from '../../components/InputBasic';
+import RoundButton from '../components/RoundButton';
+import InputBasic from '../components/InputBasic';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import * as Api from '../utils/api.js';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [hrdNetId, setHrdNetId] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {}, []);
+
+  const loginAction = () => {
+    Api.post('students/login', {
+      hrdNetId: hrdNetId,
+      password: password,
+    }).then((res) => {
+
+      localStorage.setItem('userToken', res.result);
+      navigate('/myPage');
+    });
+  };
 
   return (
     <LoginPageWrapper>
       <Link to="/">
         <LogoWrapper>
           <LogoImgWrapper>
-            <LogoImg src="#" />
+            <LogoImg src='/edu_logo.png'/>
           </LogoImgWrapper>
         </LogoWrapper>
       </Link>
       <LoginForm>
         <InputTagWrapper>
           <InputBasic
-            text="Email"
-            type={'email'}
-            value={email}
+            type='text'
+            placeholder='HRD-Net-Id'
+            value={hrdNetId}
             onChange={(event) => {
-              setEmail(event.target.value);
+              setHrdNetId(event.target.value);
             }}
           />
           <InputBasic
-            text="Password"
-            type={'password'}
+            type='password'
             value={password}
             onChange={(event) => {
               setPassword(event.target.value);
@@ -38,7 +52,13 @@ const Login = () => {
           />
         </InputTagWrapper>
         <LoginBtnWrapper>
-          <RoundButton text={'Log in'} type={'primary'} action={() => {}} />
+          <RoundButton
+            text={'Log in'}
+            type={'primary'}
+            action={() => {
+              loginAction();
+            }}
+          />
         </LoginBtnWrapper>
       </LoginForm>
     </LoginPageWrapper>
@@ -52,23 +72,26 @@ const LogoWrapper = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  min-height: 8rem;
+  width: 100%;
+
 `;
 
 const LogoImgWrapper = styled.div`
   display: flex;
-  max-width: 100%;
-  max-height: 40vh;
   aspect-ratio: 1;
   justify-content: center;
   align-items: center;
-  gap: 1em;
+  gap: 1rem;
+  flex-direction: column;  
+  align-items: center;
+  justify-content: center;
+  padding-left: 5rem;
 `;
 
 const LogoImg = styled.img`
-  width: 100%;
-  max-width: 500px;
-  max-height: 500px;
-  aspect-ratio: 1;
+  object-fit:cover;
+  width: 16rem;
 `;
 
 const LoginPageWrapper = styled.div`
@@ -81,11 +104,11 @@ const LoginPageWrapper = styled.div`
 
 const LoginForm = styled.div`
   width: 100%;
-  min-height: 15rem;
+  min-height: 13rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 4rem;
+  gap: 1.5rem;
 `;
 
 const LoginBtnWrapper = styled.div`

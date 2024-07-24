@@ -22,7 +22,7 @@ const RoundPrimaryBtn = styled.button`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 3rem;
+  height: 2.5rem;
   border-radius: 50px;
 
   &.primary {
