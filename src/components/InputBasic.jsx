@@ -16,6 +16,7 @@ const InputBasic = (props) => {
           (props.searchIcon ? 'search ' : '') +
           (props.editInput ? 'editInput' : '')
         }
+        value={props.value}
         type={props.type == 'bankAccount' ? 'text' : props.type}
         onChange={props.onChange}
         defaultValue={props.text}

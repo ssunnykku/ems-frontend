@@ -140,12 +140,18 @@ const Mypage = () => {
       name: "로그인 필요",
       hrdNetId: "로그인 필요",
       birthDate: "0000.00.00",
-      phoneNumber: "010-1234-5678",
+      phoneNumber: "01000000000",
       bank: "테스트은행",
-      accountNumber: "110-123-567890",
+      accountNumber: "000000000000",
       email: "test@test.com"
     }
   );
+  function onChangeInput(e){
+    setStudent({
+      ...student,
+      [e.target.name]: e.target.value
+    })
+  }
   const [errorMessage, setErrorMessage] = useState();
   const ErrorMessage = styled.div`
     width: 100%;
@@ -255,10 +261,11 @@ const Mypage = () => {
                 <InputBasic
                   height="1.8461"
                   width="7.7rem"
-                  text={Utils.addHyphenToPhoneNumber(student.phoneNumber)}
+                  value={Utils.addHyphenToPhoneNumber(student.phoneNumber)}
                   type="tel"
                   title="전화번호 입력 형식이 맞지 않습니다. 다시한번 확인하시고 직원에게 문의하여주십시오."
                   name="phoneNumber"
+                  onChange={onChangeInput}
                   required
                 ></InputBasic>
               </EditStudentInfoRow>
@@ -267,7 +274,8 @@ const Mypage = () => {
                 <InputBasic
                   height="1.8461"
                   width="7.7rem"
-                  text={student.bank}
+                  value={student.bank}
+                  onChange={onChangeInput}
                   name="bank"
                   required
                 ></InputBasic>
@@ -277,7 +285,8 @@ const Mypage = () => {
                 <InputBasic
                   height="1.8461"
                   width="7.7rem"
-                  text={student.accountNumber}
+                  value={student.accountNumber}
+                  onChange={onChangeInput}
                   name="accountNumber"
                   type='bankAccount'
                   required
@@ -288,7 +297,8 @@ const Mypage = () => {
                 <InputBasic
                   height="1.8461"
                   width="7.7rem"
-                  text={student.email}
+                  value={student.email}
+                  onChange={onChangeInput}
                   name="email"
                   type="email"
                   required
@@ -296,7 +306,7 @@ const Mypage = () => {
               </EditStudentInfoRow>
               <EditStudentInfoRow>
                 <span>현재 비밀번호</span>
-                <InputBasic height="1.8461" width="7.7rem" name="currentPassword" required></InputBasic>
+                <InputBasic height="1.8461" type='password' width="7.7rem" name="currentPassword" required></InputBasic>
               </EditStudentInfoRow>
               <EditStudentInfoRow>
                 <span>새 비밀번호</span>
